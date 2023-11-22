@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Alert, StyleSheet, View} from 'react-native';
+import {Alert, StyleSheet, View, Image} from 'react-native';
 import {Button, Input, Text} from 'react-native-elements';
 import {supabase} from '../services/supabaseServices';
 
@@ -19,6 +19,10 @@ const Login = ({navigation}) => {
   }
   return (
     <View style={styles.container}>
+      <Image
+        source={require('../assets/images/appLogo.png')}
+        style={{width: 200, height: 200, alignSelf: 'center'}}
+      />
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Input
           label="Email"
@@ -63,8 +67,9 @@ const Login = ({navigation}) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 40,
+    flex: 1,
     padding: 12,
+    backgroundColor: 'white',
   },
   verticallySpaced: {
     paddingTop: 4,

@@ -14,13 +14,19 @@ const EventItem = ({item}) => {
   const formattedTime = dateTimeMoment.format('h:mm:ss a');
   const formattedDateTime = moment(timestamp).format('MMMM Do YYYY, h:mm:ss a');
 
-  const handleNotification = item => {
+  const handleNotification = (item, isRegistered) => {
     PushNotification.cancelAllLocalNotifications();
+    let message = `Thanks For Registration`;
+    let title = `You have registered for ${item.event_name}`;
+    if (!isRegistered) {
+      message = 'Cancelled Registration';
+      title = `Registration cancelled for ${item.event_name}`;
+    }
     PushNotification.localNotification({
       channelId: 'event-channel',
-      title: `You have registered for ${item.event_name}`,
-      message: 'Thanks For Registration',
-      bigText: 'Thanks For Registration',
+      title: title,
+      message: message,
+      bigText: message,
       color: 'red',
       id: 1,
       picture: item.event_banner_url,
@@ -106,7 +112,7 @@ const EventItem = ({item}) => {
         </View>
         <TouchableOpacity
           onPress={() => {
-            handleNotification(item);
+            handleNotification(item, !isRegistered);
             setIsRegistered(!isRegistered);
           }}
           style={{

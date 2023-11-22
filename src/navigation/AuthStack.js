@@ -10,7 +10,11 @@ const AuthStack = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="SignUp" component={SignUp} />
+      <Stack.Screen
+        name="SignUp"
+        component={SignUp}
+        options={{headerTitle: 'Create Account'}}
+      />
     </Stack.Navigator>
   );
 };

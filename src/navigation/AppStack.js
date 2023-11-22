@@ -10,6 +10,7 @@ import Community from '../screens/Community';
 import {Dimensions, Image, View, Text, SafeAreaView} from 'react-native';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import Account from '../screens/Account';
+import UploadPost from '../screens/UploadPost';
 const Stack = createNativeStackNavigator();
 
 const AppStack = () => {
@@ -49,6 +50,15 @@ const EventStackScreen = () => {
   );
 };
 
+const UploadPostStack = createNativeStackNavigator();
+const UploadPostStackScreen = () => {
+  return (
+    <UploadPostStack.Navigator screenOptions={{headerTitle: 'Post'}}>
+      <UploadPostStack.Screen name="UploadPost" component={UploadPost} />
+    </UploadPostStack.Navigator>
+  );
+};
+
 const CommunityStack = createNativeStackNavigator();
 const CommunityStackScreen = () => {
   return (
@@ -72,6 +82,14 @@ function BottomTab() {
         headerShown: false,
         tabBarStyle: {
           height: 60,
+          backgroundColor: 'white',
+          alignItems: 'center',
+          justifyContent: 'center',
+        },
+        tabBarItemStyle: {
+          marginVertical: 5,
+          alignItems: 'center',
+          justifyContent: 'space-evenly',
         },
       }}>
       <Tab.Screen
@@ -94,6 +112,17 @@ function BottomTab() {
             return (
               <FontAwesome6 name="location-dot" color={color} size={size} />
             );
+          },
+        }}
+      />
+
+      <Tab.Screen
+        name="UploadPostStack"
+        component={UploadPostStackScreen}
+        options={{
+          tabBarLabel: 'Post',
+          tabBarIcon: ({size, color}) => {
+            return <Feather name="plus-circle" color={color} size={size} />;
           },
         }}
       />

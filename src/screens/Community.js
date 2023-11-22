@@ -12,6 +12,7 @@ import {
 import {supabase} from '../services/supabaseServices';
 import {FlashList} from '@shopify/flash-list';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MemberItem from '../components/MemberItem';
 const Community = ({navigation}) => {
   const [session, setSession] = useState(null);
   useEffect(() => {
@@ -54,46 +55,18 @@ const Community = ({navigation}) => {
             textAlign: 'center',
             fontSize: 18,
             fontWeight: '700',
-            marginVertical: 10,
+            marginBottom: 10,
+            padding: 10,
+            backgroundColor: 'white',
           }}>
-          Community Memembers
+          Neighbour Nook Community
         </Text>
         <FlashList
           data={users}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
           }
-          renderItem={({item}) => (
-            <View
-              style={{
-                width: '90%',
-                backgroundColor: 'white',
-                alignSelf: 'center',
-                marginBottom: 10,
-                padding: 10,
-                flexDirection: 'row',
-                borderRadius: 10,
-              }}>
-              <Image
-                source={{
-                  uri: item.avatar_url
-                    ? item.avatar_url
-                    : 'https://i.pinimg.com/474x/c0/c8/17/c0c8178e509b2c6ec222408e527ba861.jpg',
-                }}
-                style={{width: 40, height: 40, borderRadius: 20}}
-                resizeMode="contain"
-              />
-              <View style={{flexDirection: 'column', marginHorizontal: 10}}>
-                <Text
-                  style={{color: 'black', fontSize: 16, fontWeight: 'bold'}}>
-                  {item.full_name ? item.full_name : 'User'}
-                </Text>
-                <Text style={{color: 'gray', fontSize: 12}}>
-                  @{item.username ? item.username : 'username'}
-                </Text>
-              </View>
-            </View>
-          )}
+          renderItem={({item}) => <MemberItem item={item} />}
           estimatedItemSize={200}
         />
       </View>
@@ -109,13 +82,11 @@ const Community = ({navigation}) => {
           borderRadius: 10,
           alignItems: 'center',
           flexDirection: 'row',
-          justifyContent: 'center',
+          justifyContent: 'space-between',
           position: 'absolute',
           bottom: 20,
         }}>
-        <Text style={{color: 'white', fontSize: 16, marginRight: 10}}>
-          My Account
-        </Text>
+        <Text style={{color: 'white', fontSize: 16}}>My Account</Text>
         <Ionicons name="person" color={'white'} size={20} />
       </TouchableOpacity>
     </View>

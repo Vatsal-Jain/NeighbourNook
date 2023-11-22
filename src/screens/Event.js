@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, FlatList, Alert} from 'react-native';
+import {View, FlatList, Alert, ActivityIndicator} from 'react-native';
 import {Input} from 'react-native-elements';
 import {supabase} from '../services/supabaseServices';
 import EventItem from '../components/EventItem';
@@ -71,31 +71,39 @@ const Event = () => {
 
   return (
     <View style={{flex: 1}}>
-      <View
-        style={{
-          marginTop: 5,
-          paddingTop: 4,
-          paddingBottom: 4,
-          alignSelf: 'stretch',
-          marginHorizontal: 10,
-        }}>
-        <Input
-          label="Search Event"
-          leftIcon={{type: 'font-awesome', name: 'search'}}
-          onChangeText={text => setSearchTerm(text)}
-          value={searchTerm}
-          placeholder="Search"
-          autoCapitalize="none"
-        />
-      </View>
-      <FlatList
-        data={filteredEventData}
-        style={{alignSelf: 'center', width: '90%'}}
-        keyExtractor={item => item.id.toString()}
-        renderItem={({item}) => {
-          return <EventItem item={item} />;
-        }}
-      />
+      {loading ? (
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <ActivityIndicator size={'large'} />
+        </View>
+      ) : (
+        <>
+          <View
+            style={{
+              marginTop: 5,
+              paddingTop: 4,
+              paddingBottom: 4,
+              alignSelf: 'stretch',
+              marginHorizontal: 10,
+            }}>
+            <Input
+              // label="Search Event"
+              leftIcon={{type: 'font-awesome', name: 'search'}}
+              onChangeText={text => setSearchTerm(text)}
+              value={searchTerm}
+              placeholder="Search"
+              autoCapitalize="none"
+            />
+          </View>
+          <FlatList
+            data={filteredEventData}
+            style={{alignSelf: 'center', width: '90%'}}
+            keyExtractor={item => item.id.toString()}
+            renderItem={({item}) => {
+              return <EventItem item={item} />;
+            }}
+          />
+        </>
+      )}
     </View>
   );
 };
