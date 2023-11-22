@@ -36,7 +36,8 @@ local.properties
 android/app/google-services.json
 
 # Ignore
-
+.env
+src/services/
 node_modules/
 _tests_/
 .bundle/
