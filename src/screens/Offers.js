@@ -13,7 +13,7 @@ import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import BottomSheet, {BottomSheetFlatList} from '@gorhom/bottom-sheet';
 import {offerData} from '../assets/json/offerData';
 import {supabase} from '../services/supabaseServices';
-
+import Geolocation from '@react-native-community/geolocation';
 const Offers = () => {
   const [session, setSession] = useState(null);
   useEffect(() => {
@@ -83,6 +83,25 @@ const Offers = () => {
     latitudeDelta: 0.1,
     longitudeDelta: 0.1,
   });
+
+  const [currentLocation, setCurrentLocation] = useState(null);
+  const getCurrentLocation = () => {
+    Geolocation.getCurrentPosition(
+      position => {
+        const {latitude, longitude} = position.coords;
+        console.log(latitude, longitude);
+        setCurrentLocation({latitude, longitude});
+      },
+      error => {
+        console.log('erro message', error.message);
+      },
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
+    );
+  };
+
+  useEffect(() => {
+    getCurrentLocation();
+  }, []);
 
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>

@@ -1,10 +1,27 @@
-import {StyleSheet, Text, View} from 'react-native';
 import React, {useState, useEffect} from 'react';
-
+import {View, FlatList, Alert} from 'react-native';
+import {Input} from 'react-native-elements';
 import {supabase} from '../services/supabaseServices';
+import EventItem from '../components/EventItem';
+import PushNotification from 'react-native-push-notification';
 
 const Event = () => {
+  const createChannels = () => {
+    PushNotification.createChannel({
+      channelId: 'event-channel',
+      channelName: 'Event Channel',
+    });
+  };
+  useEffect(() => {
+    createChannels();
+  }, []);
+
   const [session, setSession] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [eventData, setEventData] = useState([]);
+  const [filteredEventData, setFilteredEventData] = useState([]);
+
   useEffect(() => {
     supabase.auth.getSession().then(({data: {session}}) => {
       setSession(session);
@@ -15,29 +32,33 @@ const Event = () => {
     });
   }, []);
 
-  const [loading, setLoading] = useState(true);
-  const [businessName, setBusinessName] = useState('');
-  const [longitude, setLongitude] = useState(0);
-  const [businessImage, setBusinessImage] = useState('');
-  const [latitude, setLatitude] = useState(0);
+  useEffect(() => {
+    if (session) getEvents();
+  }, [session]);
 
-  async function getBusiness() {
+  useEffect(() => {
+    // Filter events based on searchTerm
+    const filteredEvents = eventData.filter(event =>
+      event.event_name.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
+    setFilteredEventData(filteredEvents);
+  }, [searchTerm, eventData]);
+
+  async function getEvents() {
     try {
       setLoading(true);
-      console.log('get business called');
+      console.log('get events called');
       if (!session?.user) throw new Error('No user on the session!');
 
-      const {data, error, status} = await supabase.from('business').select('*');
+      const {data, error, status} = await supabase.from('events').select('*');
 
       if (error && status !== 406) {
         throw error;
       }
-      // console.log('data from bsuiness is', data, status);
+
+      console.log('data from events is', data, status);
       if (data) {
-        setBusinessName(data.business_name);
-        setLatitude(data.latitude);
-        setLongitude(data.longitude);
-        setBusinessImage(data.business_logo_url);
+        setEventData(data ?? []);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -48,16 +69,35 @@ const Event = () => {
     }
   }
 
-  useEffect(() => {
-    if (session) getBusiness();
-  }, [session]);
   return (
-    <View>
-      <Text>Event</Text>
+    <View style={{flex: 1}}>
+      <View
+        style={{
+          marginTop: 5,
+          paddingTop: 4,
+          paddingBottom: 4,
+          alignSelf: 'stretch',
+          marginHorizontal: 10,
+        }}>
+        <Input
+          label="Search Event"
+          leftIcon={{type: 'font-awesome', name: 'search'}}
+          onChangeText={text => setSearchTerm(text)}
+          value={searchTerm}
+          placeholder="Search"
+          autoCapitalize="none"
+        />
+      </View>
+      <FlatList
+        data={filteredEventData}
+        style={{alignSelf: 'center', width: '90%'}}
+        keyExtractor={item => item.id.toString()}
+        renderItem={({item}) => {
+          return <EventItem item={item} />;
+        }}
+      />
     </View>
   );
 };
 
 export default Event;
-
-const styles = StyleSheet.create({});

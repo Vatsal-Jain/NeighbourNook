@@ -8,6 +8,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import Event from '../screens/Event';
 import Community from '../screens/Community';
 import {Dimensions, Image, View, Text, SafeAreaView} from 'react-native';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import Account from '../screens/Account';
 const Stack = createNativeStackNavigator();
 
@@ -52,7 +53,11 @@ const CommunityStack = createNativeStackNavigator();
 const CommunityStackScreen = () => {
   return (
     <CommunityStack.Navigator>
-      <CommunityStack.Screen name="Community" component={Community} />
+      <CommunityStack.Screen
+        name="Community"
+        component={Community}
+        options={{headerShown: false}}
+      />
       <CommunityStack.Screen name="Account" component={Account} />
     </CommunityStack.Navigator>
   );
@@ -62,7 +67,13 @@ const Tab = createBottomTabNavigator();
 
 function BottomTab() {
   return (
-    <Tab.Navigator screenOptions={{headerShown: false}}>
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarStyle: {
+          height: 60,
+        },
+      }}>
       <Tab.Screen
         name="HomeStack"
         component={HomeStackScreen}
@@ -78,10 +89,10 @@ function BottomTab() {
         name="OffersStack"
         component={OffersStackScreen}
         options={{
-          tabBarLabel: 'Deals',
+          tabBarLabel: 'Nearby',
           tabBarIcon: ({size, color}) => {
             return (
-              <MaterialIcons name="local-offer" color={color} size={size} />
+              <FontAwesome6 name="location-dot" color={color} size={size} />
             );
           },
         }}

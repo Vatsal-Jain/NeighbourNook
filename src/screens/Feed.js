@@ -112,8 +112,6 @@ const Feed = () => {
           );
         }}
       />
-
-      <Text>Feed</Text>
     </SafeAreaView>
   );
 };
